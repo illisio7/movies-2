@@ -15,7 +15,7 @@ class MovieTest
 
 	#counting the mean error aka average error 
 	def mean
-		sum = 0
+		sum = 0.0
 		@results.each do |el|
 			sum += el[2]-el[3]
 		end
