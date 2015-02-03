@@ -141,7 +141,7 @@ m = MovieData.new("ml-100k","u1")
 
 
 puts Time.now
-  m.run_test
+m.run_test(1000)
 p  m.movTest.results
 
 puts Time.now
