@@ -62,22 +62,6 @@ class MovieData
 		return hash.sort_by(&:last).reverse
 	end
 
-	#just to make the pearson_similarity method less complex and easier to read
-	def pearson_similarity_helper (similarity)
-		@sum_1 = 0
-		@sum_2 = 0
-		@sum_1_sq = 0
-		@sum_2_sq = 0
-		@product = 0
-
-		similarity.each do |mov|
-			@sum_1 += @train_data[u1].return_rating(mov)
-			@sum_1_sq += @train_data[u1].return_rating(mov)**2
-			@sum_2 += @train_data[u2].return_rating(mov)
-			@sum_2_sq += @train_data[u2].return_rating(mov)**2
-			@product += @train_data[u1].return_rating(mov)*@train_data[u2].return_rating(mov)
-		end
-	end
 	
 	#using pearson correlation for similarity, 1 = perfect corelation -1 = opposite correlation
 	def pearson_similarity (u1,u2)
@@ -85,10 +69,22 @@ class MovieData
 		if similarity.empty?
 			return 0
 		end
-		pearson_similarity_helper(similarity)
+		sum_1 = 0
+		sum_2 = 0
+		sum_1_sq = 0
+		sum_2_sq = 0
+		product = 0
 
-		numerator = @product - (@sum_1*@sum_2/similarity.length)
-		denom = Math.sqrt((@sum_1_sq-(@sum_1**2)/similarity.length)*(@sum_2_sq-(@sum_2**2)/similarity.length))
+		similarity.each do |mov|
+			sum_1 += @train_data[u1].return_rating(mov)
+			sum_1_sq += @train_data[u1].return_rating(mov)**2
+			sum_2 += @train_data[u2].return_rating(mov)
+			sum_2_sq += @train_data[u2].return_rating(mov)**2
+			product += @train_data[u1].return_rating(mov)*@train_data[u2].return_rating(mov)
+		end
+
+		numerator = product - (sum_1*sum_2/similarity.length)
+		denom = Math.sqrt((sum_1_sq-(sum_1**2)/similarity.length)*(sum_2_sq-(sum_2**2)/similarity.length))
 
 		if denom == 0 
 			return 0
