@@ -27,9 +27,9 @@ class MovieTest
 		sum = 0
 		mean_error = mean 
 		@results.each do |el|
-			sum += (el[2]-el[3]-mean_error)**2
+			sum += (el[3]-mean_error)**2
 		end
-	return Math.sqrt(sum/@results.length)
+	return Math.sqrt(sum/@results.length-1)
 	
 	end
 	#root mean squared error method
@@ -41,4 +41,8 @@ class MovieTest
 	return Math.sqrt(sum/@results.length)
 
 	end 
+
+	def to_a
+		return results
+	end
 end
