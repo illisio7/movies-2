@@ -1,11 +1,11 @@
 class MovieTest
 	attr_accessor :results
-
+	#Initializing array
 	def initialize 
 		@results = Array.new
 
 	end
-
+	#helper method to push into array 
 	def push_results(user,movie,rating,prediction)
 
 		@results.push([user,movie,rating,prediction])
@@ -32,7 +32,7 @@ class MovieTest
 	return Math.sqrt(sum/@results.length)
 	
 	end
-
+	#root mean squared error method
 	def rms 
 		sum = 0
 		@results.each do |el|

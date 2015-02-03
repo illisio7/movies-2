@@ -16,4 +16,8 @@ class User_data
 	def return_movies
 		return @movie_and_rating.keys
 	end
+
+	def store_data (movie, rating)
+		@movie_and_rating.store(movie, rating)
+	end
 end

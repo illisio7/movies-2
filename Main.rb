@@ -22,10 +22,10 @@ class MovieData
 			end
 			words = line.split("\t")
 			if data.has_key?(words[0].to_i)
-				data[words[0].to_i].movie_and_rating.store(words[1].to_i,words[2].to_i)
+				data[words[0].to_i].store_data(words[1].to_i,words[2].to_i)
 			else
 				x = User_data.new
-				x.movie_and_rating.store(words[1].to_i,words[2].to_i)
+				x.store_data(words[1].to_i,words[2].to_i)
 				data.store(words[0].to_i, x)
 			end
 			i+=1
@@ -62,30 +62,13 @@ class MovieData
 		return hash.sort_by(&:last).reverse
 	end
 
-	#returns similarity between u1 u2
-	def similarity (u1,u2)
-
-		similarity = @train_data[u1].movie_and_rating.keys & @train_data[u2].movie_and_rating.keys
-		if similarity.empty?
-			return 0
-		end
-		sim = 0 
-		similarity.each do |mov|
-			dif = (@train_data[u1].movie_and_rating[mov] - @train_data[u2].movie_and_rating[mov])**2
-			sim +=dif
-		end
-
-		euc = 1/(1+Math.sqrt(sim))
-		return euc
-
-	end
-
+	
+	#using pearson correlation for similarity, 1 = perfect corelation -1 = opposite correlation
 	def pearson_similarity (u1,u2)
 		similarity = @train_data[u1].movie_and_rating.keys & @train_data[u2].movie_and_rating.keys
 		if similarity.empty?
 			return 0
 		end
-
 		sum_1 = 0
 		sum_2 = 0
 		sum_1_sq = 0
@@ -122,19 +105,6 @@ class MovieData
 		return sort_decrease_order(hash_user_similar)
 
 	end
-	#takes all the users that have similarity > 0.4
-	def pick_all_users_similar (array)
-		most_similar_users = Array.new
-		array.each do |el|
-			if el[1] > 0.7
-				most_similar_users.push(el[0])
-			else 
-				break
-			end
-		end
-		return most_similar_users
-	end
-
 
 	def predict (u, m)
 		users = most_similar(u)
@@ -149,25 +119,6 @@ class MovieData
 		end
 	end
 
-	# 	users = most_similar(u)
-	# 	i = 0.0
-	# 	sum = 0.0
-	# 	users.each do |el|
-	# 		if @train_data[el[0]].return_rating(m)
-	# 			if el[1] > 0.8
-
-	# 				sum += @train_data[el[0]].return_rating(m)
-	# 				i += 1
-
-	# 			end
-	# 		end	
-	# 	end
-	# 	if i == 0 
-	# 		return 0
-	# 	else
-	# 		return sum/i
-	# 	end
-	# end
 
 	def run_test(k=nil)
 		@movTest = MovieTest.new
@@ -186,15 +137,7 @@ require "./user_data"
 require "./MovieTest"
 m = MovieData.new("ml-100k","u1")
 
-# puts m.train_data[1].movie_and_rating 
 
-# puts m.rating(1, 1)
-# p m.movies(1)
- # p m.pick_all_users_similar(m.most_similar(1))
-
-# puts m.most_similar(1)
-
- # puts m.predict(1, 86) 
 puts Time.now
   m.run_test
 p  m.movTest.results
@@ -207,7 +150,7 @@ puts m.movTest.mean
 puts "StdDev = "
 puts m.movTest.stddev
 puts "RMS ="
-puts m.movtest.rms
+puts m.movTest.rms
 
 
  # puts m.test_data
