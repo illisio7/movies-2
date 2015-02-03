@@ -13,7 +13,7 @@ class MovieData
 
 		load_data(@train_file, @train_data)
 	end
-
+	#load the data files and if k = int then the first k lines of that file
 	def load_data (file, data, k=nil)
 		i=0
 		file.each_line do |line|
@@ -32,6 +32,7 @@ class MovieData
 		end
 	end
 
+	#returns rating of the movie the user has given
 	def rating (user, movie)
 		if @train_data.has_key?(user) && @train_data[user].return_rating(movie)
 			return @train_data[user].return_rating(movie)
@@ -39,7 +40,7 @@ class MovieData
 			return 0
 		end
 	end
-
+	#returns array of movies the user has watched
 	def movies(user)
 		if @train_data.has_key?(user)
 			return @train_data[user].return_movies
@@ -47,7 +48,7 @@ class MovieData
 			return 0
 		end
 	end
-
+	#returns and array of users who seen this movies
 	def viewers (movie)
 		view = Array.new
 		@train_data.each_value do |val| 
@@ -105,7 +106,8 @@ class MovieData
 		return sort_decrease_order(hash_user_similar)
 
 	end
-
+	#predict what user u will give movie m by assumin he will give the same rating as the user who is most similar to him and who has seen the movie. 
+	#if most similar is <0 then assume he will give the complete opposite rating of that user
 	def predict (u, m)
 		users = most_similar(u)
 
@@ -119,10 +121,10 @@ class MovieData
 		end
 	end
 
-
-	def run_test(k=nil)
+	#run the tests on the specified number of lines, if not specified run on the whole set
+	def run_test(lines=nil)
 		@movTest = MovieTest.new
-		load_data(@test_file, @test_data, k)
+		load_data(@test_file, @test_data, lines)
 
 		@test_data.each_key do |k|
 			@test_data[k].movie_and_rating.each_key do |key|
