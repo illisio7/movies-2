@@ -24,7 +24,7 @@ class MovieTest
 	end
 	#counting the std deviation of the errors
 	def stddev
-		sum = 0
+		sum = 0.0
 		mean_error = mean 
 		@results.each do |el|
 			sum += (el[3]-mean_error)**2
@@ -34,7 +34,7 @@ class MovieTest
 	end
 	#root mean squared error method
 	def rms 
-		sum = 0
+		sum = 0.0
 		@results.each do |el|
 			sum+=(el[2]-el[3])**2
 		end
